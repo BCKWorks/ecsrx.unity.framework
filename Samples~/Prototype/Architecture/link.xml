@@ -1,0 +1,7 @@
+<linker>
+  <assembly fullname="intervr.if" preserve="all"/>
+  <assembly fullname="intervr.ts.ecsrx.unity" preserve="all"/>
+  <assembly fullname="intervr.ts.ecsrx" preserve="all"/>
+  <assembly fullname="intervr.ts.unirx" preserve="all"/>
+  <assembly fullname="intervr.ts.zenject" preserve="all"/>
+</linker>
