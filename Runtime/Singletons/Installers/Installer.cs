@@ -2,10 +2,10 @@
 using UnityEngine;
 using Zenject;
 
-namespace InterVR.IF.Installer
+namespace EcsRx.Unity.Framework
 {
-    [CreateAssetMenu(fileName = "IF_Settings", menuName = "InterVR/IF/Settings")]
-    public class IF_Installer : ScriptableObjectInstaller<IF_Installer>
+    [CreateAssetMenu(fileName = "EcsRxUnityFrameworkSettings", menuName = "BCKWorks/EcsRxUnityFramework/Settings")]
+    public class Installer : ScriptableObjectInstaller<Installer>
     {
 #pragma warning disable 0649
         [SerializeField]
@@ -20,7 +20,7 @@ namespace InterVR.IF.Installer
         [Serializable]
         public class Settings
         {
-            public string Name = "IF Installer";
+            public string Name = "BCKWorks EcsRxUnityFramework Installer";
         }
     }
 }

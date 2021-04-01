@@ -2,9 +2,9 @@
 using System.Collections;
 using UnityEngine;
 
-namespace InterVR.IF.Modules
+namespace EcsRx.Unity.Framework
 {
-    public interface IF_IModule
+    public interface IModule
     {
         bool Ready { get; }
         IEnumerator Initialize();

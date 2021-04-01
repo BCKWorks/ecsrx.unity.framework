@@ -1,30 +1,28 @@
 ﻿using EcsRx.Infrastructure.Extensions;
 using EcsRx.Zenject;
-using InterVR.IF.Events;
-using InterVR.IF.Modules;
 using System.Collections;
 using UnityEngine;
 
-namespace InterVR.IF
+namespace EcsRx.Unity.Framework
 {
     [DefaultExecutionOrder(-20000)]
-    public abstract class IF_ApplicationBehaviour : EcsRxApplicationBehaviour
+    public abstract class EcsRxUnityFrameworkApplicationBehaviour : EcsRxApplicationBehaviour
     {
         protected override void BindSystems()
         {
             base.BindSystems();
 
             Container.BindApplicableSystems(
-                "InterVR.IF.Systems",
-                "InterVR.IF.ViewResolvers");
+                "EcsRxUnityFramework.Systems",
+                "EcsRxUnityFramework.ViewResolvers");
         }
 
         protected override void LoadModules()
         {
             base.LoadModules();
 
-            Container.LoadModule<IF_ToolModules>();
-            Container.LoadModule<IF_PluginModules>();
+            Container.LoadModule<ToolModules>();
+            Container.LoadModule<PluginModules>();
         }
 
         protected override IEnumerator ApplicationStartedAsync()
@@ -36,7 +34,7 @@ namespace InterVR.IF
         protected override void ApplicationStarted()
         {
             Started = true;
-            EventSystem.Publish(new IF_ApplicationStartedEvent() { });
+            EventSystem.Publish(new EcsRxUnityFrameworkApplicationStartedEvent() { });
         }
 
         protected virtual void OnDestroy()

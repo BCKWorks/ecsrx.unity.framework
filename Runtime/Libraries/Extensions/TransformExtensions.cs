@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-namespace InterVR.IF.Extensions
+namespace EcsRx.Unity.Framework
 {
-    public static class IF_TransformExtensions
+    public static class TransformExtensions
     {
         public static void ChangeLayersRecursively(this Transform trans, string name)
         {

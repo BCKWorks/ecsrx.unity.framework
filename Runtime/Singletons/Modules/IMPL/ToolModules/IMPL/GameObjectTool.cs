@@ -2,9 +2,9 @@
 using System.Collections;
 using UnityEngine;
 
-namespace InterVR.IF.Modules
+namespace EcsRx.Unity.Framework
 {
-    public class IF_GameObjectTool : IF_IGameObjectTool
+    public class GameObjectTool : IGameObjectTool
     {
         public bool Ready { get; private set; }
 

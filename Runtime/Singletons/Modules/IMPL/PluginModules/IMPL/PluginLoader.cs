@@ -7,9 +7,9 @@ using System.Collections;
 using UniRx;
 using UnityEngine;
 
-namespace InterVR.IF.Modules
+namespace EcsRx.Unity.Framework
 {
-    public class IF_ContentPluginLoader : IF_IContentPluginLoader
+    public class PluginLoader : IPluginLoader
     {
         public bool Ready { get; private set; }
 

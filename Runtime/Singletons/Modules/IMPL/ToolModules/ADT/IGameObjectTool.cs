@@ -1,9 +1,9 @@
 ﻿using EcsRx.Unity.Dependencies;
 using UnityEngine;
 
-namespace InterVR.IF.Modules
+namespace EcsRx.Unity.Framework
 {
-    public interface IF_IGameObjectTool : IF_IModule
+    public interface IGameObjectTool : IModule
     {
         GameObject InstantiateWithInit(GameObject prefab, Transform parent = null);
         GameObject InstantiateWithInit(IUnityInstantiator instantiator, GameObject prefab, Transform parent = null);

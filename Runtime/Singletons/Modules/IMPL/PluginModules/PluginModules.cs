@@ -2,24 +2,24 @@
 using EcsRx.Infrastructure.Extensions;
 using System.Collections;
 
-namespace InterVR.IF.Modules
+namespace EcsRx.Unity.Framework
 {
-    public class IF_PluginModules : IDependencyModule
+    public class PluginModules : IDependencyModule
     {
         public void Setup(IDependencyContainer container)
         {
-            container.Bind<IF_IContentPluginLoader, IF_ContentPluginLoader>();
+            container.Bind<IPluginLoader, PluginLoader>();
         }
 
         public IEnumerator Initialize(IDependencyContainer container)
         {
-            yield return container.Resolve<IF_IContentPluginLoader>().Initialize();
+            yield return container.Resolve<IPluginLoader>().Initialize();
         }
 
         public void Shutdown(IDependencyContainer container)
         {
-            container.Resolve<IF_IContentPluginLoader>().Shutdown();
-            container.Unbind<IF_IContentPluginLoader>();
+            container.Resolve<IPluginLoader>().Shutdown();
+            container.Unbind<IPluginLoader>();
         }
     }
 }

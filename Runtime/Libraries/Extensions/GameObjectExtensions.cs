@@ -4,9 +4,9 @@ using EcsRx.Unity.MonoBehaviours;
 using EcsRx.Zenject;
 using UnityEngine;
 
-namespace InterVR.IF.Extensions
+namespace EcsRx.Unity.Framework
 {
-    public static class IF_GameObjectExtensions
+    public static class GameObjectExtensions
     {
         public static IEntity GetEntity(this GameObject go, bool create = false, int collectionId = 0)
         {

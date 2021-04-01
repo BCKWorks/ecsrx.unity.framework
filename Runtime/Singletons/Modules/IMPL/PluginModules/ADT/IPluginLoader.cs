@@ -4,9 +4,9 @@ using System;
 using UniRx;
 using UnityEngine;
 
-namespace InterVR.IF.Modules
+namespace EcsRx.Unity.Framework
 {
-    public interface IF_IContentPluginLoader : IF_IModule
+    public interface IPluginLoader : IModule
     {
         T Load<T>() where T: IEcsRxPlugin, new();
         void Unload();

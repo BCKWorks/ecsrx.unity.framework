@@ -2,24 +2,24 @@
 using EcsRx.Infrastructure.Extensions;
 using System.Collections;
 
-namespace InterVR.IF.Modules
+namespace EcsRx.Unity.Framework
 {
-    public class IF_ToolModules : IDependencyModule
+    public class ToolModules : IDependencyModule
     {
         public void Setup(IDependencyContainer container)
         {
-            container.Bind<IF_IGameObjectTool, IF_GameObjectTool>();
+            container.Bind<IGameObjectTool, GameObjectTool>();
         }
 
         public IEnumerator Initialize(IDependencyContainer container)
         {
-            yield return container.Resolve<IF_IGameObjectTool>().Initialize();
+            yield return container.Resolve<IGameObjectTool>().Initialize();
         }
 
         public void Shutdown(IDependencyContainer container)
         {
-            container.Resolve<IF_IGameObjectTool>().Shutdown();
-            container.Unbind<IF_IGameObjectTool>();
+            container.Resolve<IGameObjectTool>().Shutdown();
+            container.Unbind<IGameObjectTool>();
         }
     }
 }
