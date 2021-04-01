@@ -2,7 +2,7 @@
   "name": "com.bckworks.ecsrx.unity.framework",
   "displayName": "BCKWorks EcsRx for Unity Framework",
   "description": "BCKWorks framework for unity using the ECS paradigm but with unirx for fully reactive systems.",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "unity": "2021.1",
   "keywords": [],
   "homepage": "https://github.com/BCKWorks/ecsrx.unity.framework#readme",

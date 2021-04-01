@@ -1,14 +1,17 @@
-﻿using EcsRx.Infrastructure.Extensions;
-using Prototype.Installer;
-using InterVR.IF;
-using Prototype.Modules;
+﻿using EcsRx.Extensions;
+using EcsRx.Infrastructure.Extensions;
+using EcsRx.Unity.Framework;
+using System;
+using System.Collections.Generic;
 using UniRx;
-using InterVR.IF.Events;
+using UnityEngine;
 
-namespace Prototype
+namespace BCKWorks.Prototype
 {
-    public class PrototypeBootstrap : IF_ApplicationBehaviour
+    public class PrototypeBootstrap : EcsRxUnityFrameworkApplicationBehaviour
     {
+        List<IDisposable> subscriptions = new List<IDisposable>();
+
         protected override void BindSystems()
         {
             base.BindSystems();
@@ -18,29 +21,49 @@ namespace Prototype
         {
             base.LoadModules();
 
-            Container.LoadModule<ContentModules>();
+            Container.LoadModule<EpisodeModules>();
         }
 
         protected override void ApplicationStarted()
         {
-            var settings = Container.Resolve<PrototypeInstaller.Settings>();
-            var contentLoader = Container.Resolve<IContentLoader>();
-            contentLoader.EnsureLoadBaseAsync().Subscribe(x =>
+            var settings = Container.Resolve<Settings>();
+            var contentLoader = Container.Resolve<IEpisodeLoader>();
+            contentLoader.LoadBaseScenesAsync().Subscribe(x =>
             {
-                contentLoader.LoadContentAsync(settings.StartContent).Subscribe(y =>
-                {
-                    this.Started = true;
+                this.Started = true;
 
-                    EventSystem.Publish(new IF_ApplicationStartedEvent()
+                Observable.Interval(TimeSpan.FromSeconds(0.1f)).First().Subscribe(y =>
+                {
+                    EventSystem.Publish(new EcsRxUnityFrameworkApplicationStartedEvent()
                     {
                     });
                 });
-            });
+            }).AddTo(subscriptions);
+
+            EventSystem.Receive<EcsRxUnityFrameworkApplicationStartedEvent>().Subscribe(evt =>
+            {
+                Debug.Log("Application Started");
+
+                contentLoader.LoadEpisodeAsync(settings.StartEpisode).Subscribe(x =>
+                {
+                });
+            }).AddTo(subscriptions);
+
+            ///
+            /// Everytime Plugin Initialized
+            /// 
+            EventSystem.Receive<EpisodeReadyEvent>().Subscribe(evt =>
+            {
+                Debug.Log("Content Ready Event");
+                EventSystem.Publish(new EpisodeStartedEvent());
+            }).AddTo(subscriptions);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
+
+            subscriptions.DisposeAll();
         }
 
         private void OnApplicationPause(bool pause)

@@ -5,14 +5,14 @@ using EcsRx.Infrastructure.Extensions;
 using EcsRx.Infrastructure.Plugins;
 using EcsRx.Systems;
 
-namespace Prototype.Plugins.PrototypeContent
+namespace BCKWorks.Prototype.Plugins.Episode01
 {
-    public class PrototypeContentPlugin : IEcsRxPlugin
+    public class EpisodePlugin : IEcsRxPlugin
     {
-        public string Name => "Prototype Content Plugin";
+        public string Name => "Episode01 Plugin";
         public Version Version => new Version(0, 1, 0);
 
-        const string systemNamespace = "Prototype.Plugins.PrototypeContent." + "Systems";
+        const string systemNamespace = "BCKWorks.Prototype.Plugins.Episode01." + "Systems";
 
         public void SetupDependencies(IDependencyContainer container)
         {

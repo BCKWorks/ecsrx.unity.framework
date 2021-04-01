@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settings:
     Name: Prototype Installer
+    StartEpisode: 1
+    StartMission: 1
