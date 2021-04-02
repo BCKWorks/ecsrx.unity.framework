@@ -7,8 +7,11 @@ using System.Collections.Generic;
 using System;
 using UniRx;
 using EcsRx.Events;
+using UnityEngine;
+using EcsRx.Unity.Framework;
+using System.Collections;
 
-namespace BCKWorks.Prototype.Plugins.Episode01
+namespace BCKWorks.Prototype.Plugins.Episode01.Systems
 {
     public class EpisodeBootstrapSystem : IManualSystem
     {
@@ -17,76 +20,59 @@ namespace BCKWorks.Prototype.Plugins.Episode01
         private readonly IEventSystem eventSystem;
         private readonly Settings settings;
         private readonly IEpisodeLoader episodeLoader;
+        private readonly ISceneLoader sceneLoader;
 
         public IGroup Group => new EmptyGroup();
 
         public EpisodeBootstrapSystem(IEntityDatabase entityDatabase,
             IEventSystem eventSystem,
             Settings settings,
-            IEpisodeLoader episodeLoader)
+            IEpisodeLoader episodeLoader,
+            ISceneLoader sceneLoader)
         {
             this.entityDatabase = entityDatabase;
             this.eventSystem = eventSystem;
             this.settings = settings;
             this.episodeLoader = episodeLoader;
+            this.sceneLoader = sceneLoader;
         }
 
         public void StartSystem(IObservableGroup observableGroup)
         {
+            Debug.Log($"Episode Bootstrap System {settings.Name}");
+
             // from IContentLoader.LoadContentAsync
-            eventSystem.Receive<EpisodeLoadedEvent>().Subscribe(evt =>
+            eventSystem.Receive<EpisodeLoadedPluginEvent>().Subscribe(evt =>
             {
-                episodeLoader.RemoveAllSceneAsync().Subscribe(_ =>
+                sceneLoader.RemoveAllSceneAsync().Subscribe(_ =>
                 {
-                    //episodeLoader.AddSceneAsync("").Subscribe(x =>
-                    //{
-                        episodeLoader.AddSceneAsync("Episode01", true).Subscribe(z =>
+                    sceneLoader.AddSceneAsync(settings.EpisodeSceneName, true).Subscribe(z =>
+                    {
+                        initEpisodeAsync().Subscribe(_ =>
                         {
-                            //initContentAsync().Subscribe(_ =>
-                            //{
-                            //    eventSystem.Publish(new EpisodeReadyEvent());
-                            //}).AddTo(subscriptions);
+                            eventSystem.Publish(new EpisodeReadyEvent());
                         }).AddTo(subscriptions);
-                    //}).AddTo(subscriptions);
+                    }).AddTo(subscriptions);
                 }).AddTo(subscriptions);
             }).AddTo(subscriptions);
         }
 
         public void StopSystem(IObservableGroup observableGroup)
         {
-            //contentInterface.UnloadQuestInfo();
-            //contentInterface.UnloadMissionInfo();
-            //contentInterface.UnloadContentInfo();
-
             subscriptions.DisposeAll();
         }
 
-        //IObservable<Unit> initContentAsync()
-        //{
-        //    return Observable.FromCoroutine<Unit>((observer) => initContent(observer));
-        //}
+        IObservable<Unit> initEpisodeAsync()
+        {
+            return Observable.FromCoroutine<Unit>((observer) => initEpisodeCO(observer));
+        }
 
-        //IEnumerator initContent(IObserver<Unit> observer)
-        //{
-        //    //var playerGravityEntity = vrInterface.GetPlayerControllerEntity();
-        //    //if (playerGravityEntity != null)
-        //    //{
-        //    //    var playerGravity = playerGravityEntity.GetUnityComponent<PlayerGravity>();
-        //    //    playerGravity.GravityEnabled = true;
-        //    //}
+        IEnumerator initEpisodeCO(IObserver<Unit> observer)
+        {
+            yield return new WaitForEndOfFrame();
 
-        //    //yield return initDatabase();
-
-        //    //contentInterface.LoadContentInfo(ContentType.Content1);
-
-        //    observer.OnNext(Unit.Default);
-        //    observer.OnCompleted();
-        //}
-
-        //IEnumerator initDatabase()
-        //{
-        //    yield return database.SetDataboxObject(DatabaseType.Mission, contentSettings.DBMissions);
-        //    yield return database.SetDataboxObject(DatabaseType.Quest, contentSettings.DBQuests);
-        //}
+            observer.OnNext(Unit.Default);
+            observer.OnCompleted();
+        }
     }
 }

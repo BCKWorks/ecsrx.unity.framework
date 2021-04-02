@@ -13,8 +13,8 @@ namespace EcsRx.Unity.Framework
             base.BindSystems();
 
             Container.BindApplicableSystems(
-                "EcsRxUnityFramework.Systems",
-                "EcsRxUnityFramework.ViewResolvers");
+                "EcsRx.Unity.Framework.Systems",
+                "EcsRx.Unity.Framework.ViewResolvers");
         }
 
         protected override void LoadModules()
@@ -23,6 +23,8 @@ namespace EcsRx.Unity.Framework
 
             Container.LoadModule<ToolModules>();
             Container.LoadModule<PluginModules>();
+            Container.LoadModule<EpisodeModules>();
+            Container.LoadModule<SceneModules>();
         }
 
         protected override IEnumerator ApplicationStartedAsync()
