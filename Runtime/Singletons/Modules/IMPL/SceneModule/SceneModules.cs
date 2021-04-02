@@ -1,11 +1,18 @@
 ﻿using EcsRx.Infrastructure.Extensions;
 using System.Collections;
 using EcsRx.Infrastructure.Dependencies;
+using System.Collections.Generic;
+using System;
 
 namespace EcsRx.Unity.Framework
 {
     public class SceneModules : IDependencyModule
     {
+        List<Type> bindings = new List<Type>()
+        {
+            typeof(ISceneLoader),
+        };
+
         public void Setup(IDependencyContainer container)
         {
             container.Bind<ISceneLoader, SceneLoader>();
@@ -13,13 +20,19 @@ namespace EcsRx.Unity.Framework
 
         public IEnumerator Initialize(IDependencyContainer container)
         {
-            yield return container.Resolve<ISceneLoader>().Initialize();
+            foreach (var bind in bindings)
+            {
+                yield return ((IModule)container.Resolve(bind)).Initialize();
+            }
         }
 
         public void Shutdown(IDependencyContainer container)
         {
-            container.Resolve<ISceneLoader>().Shutdown();
-            container.Unbind<ISceneLoader>();
+            foreach (var bind in bindings)
+            {
+                ((IModule)container.Resolve(bind)).Shutdown();
+                container.Unbind(bind);
+            }
         }
     }
 }

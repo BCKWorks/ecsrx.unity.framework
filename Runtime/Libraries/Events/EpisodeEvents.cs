@@ -2,11 +2,14 @@
 {
     public class EpisodeLoadedPluginEvent
     {
+        public int Id;
+        public int MissionId;
     }
 
     public class EpisodeLoadPluginEvent
     {
-        public int ID;
+        public int Id;
+        public int MissionId;
     }
 
     public class EpisodeUnloadPluginEvent

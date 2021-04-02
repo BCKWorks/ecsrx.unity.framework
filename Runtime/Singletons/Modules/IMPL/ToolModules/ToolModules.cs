@@ -1,11 +1,18 @@
 ﻿using EcsRx.Infrastructure.Dependencies;
 using EcsRx.Infrastructure.Extensions;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace EcsRx.Unity.Framework
 {
     public class ToolModules : IDependencyModule
     {
+        List<Type> bindings = new List<Type>()
+        {
+            typeof(IGameObjectTool),
+        };
+
         public void Setup(IDependencyContainer container)
         {
             container.Bind<IGameObjectTool, GameObjectTool>();
@@ -13,13 +20,19 @@ namespace EcsRx.Unity.Framework
 
         public IEnumerator Initialize(IDependencyContainer container)
         {
-            yield return container.Resolve<IGameObjectTool>().Initialize();
+            foreach (var bind in bindings)
+            {
+                yield return ((IModule)container.Resolve(bind)).Initialize();
+            }
         }
 
         public void Shutdown(IDependencyContainer container)
         {
-            container.Resolve<IGameObjectTool>().Shutdown();
-            container.Unbind<IGameObjectTool>();
+            foreach (var bind in bindings)
+            {
+                ((IModule)container.Resolve(bind)).Shutdown();
+                container.Unbind(bind);
+            }
         }
     }
 }

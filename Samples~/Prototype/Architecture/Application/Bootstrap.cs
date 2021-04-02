@@ -54,7 +54,7 @@ namespace BCKWorks.Prototype
             {
                 Debug.Log("Application Started");
 
-                episodeLoader.LoadEpisodeAsync(settings.StartEpisode).Subscribe(x =>
+                episodeLoader.LoadEpisodeAsync(settings.StartEpisode, settings.StartMission).Subscribe(x =>
                 {
                 });
             }).AddTo(subscriptions);

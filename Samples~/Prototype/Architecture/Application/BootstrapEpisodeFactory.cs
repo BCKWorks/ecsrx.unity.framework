@@ -20,7 +20,7 @@ namespace BCKWorks.Prototype
 
             EventSystem.Receive<EpisodeLoadPluginEvent>().Subscribe(evt =>
             {
-                if (evt.ID == 1)
+                if (evt.Id == 1)
                 {
                     pluginLoader.Load<Plugins.Episode01.EpisodePlugin>();
                 }

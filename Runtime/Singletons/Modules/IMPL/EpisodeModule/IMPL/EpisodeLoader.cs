@@ -33,9 +33,9 @@ namespace EcsRx.Unity.Framework
 		{
 		}
 
-		public IObservable<Unit> LoadEpisodeAsync(int id)
+		public IObservable<Unit> LoadEpisodeAsync(int id, int missionId = 1)
 		{
-			return Observable.FromCoroutine<Unit>((observer) => loadEpisode(observer, id));
+			return Observable.FromCoroutine<Unit>((observer) => loadEpisode(observer, id, missionId));
 		}
 
 		public IObservable<Unit> UnloadEpisodeAsync()
@@ -43,27 +43,31 @@ namespace EcsRx.Unity.Framework
 			return Observable.FromCoroutine<Unit>((observer) => unloadEpisode(observer));
 		}
 
-		IEnumerator loadEpisode(IObserver<Unit> observer, int id)
+		IEnumerator loadEpisode(IObserver<Unit> observer, int id, int missionId = 1)
 		{
 			yield return unloadEpisodeCO();
 
-			yield return loadEpisodeCO(id);
+			yield return loadEpisodeCO(id, missionId);
 
 			observer.OnNext(Unit.Default);
 			observer.OnCompleted();
 		}
 
-		IEnumerator loadEpisodeCO(int id)
+		IEnumerator loadEpisodeCO(int id, int missionId = 1)
 		{
 			yield return unloadEpisodeCO();
 
 			// load plugin
-			loadEpisodePlugin(id);
+			loadEpisodePlugin(id, missionId);
 
 			// give some frametime
 			yield return new WaitForEndOfFrame();
 
-			eventSystem.Publish(new EpisodeLoadedPluginEvent());
+			eventSystem.Publish(new EpisodeLoadedPluginEvent()
+			{
+				Id = id,
+				MissionId = missionId
+			});
 		}
 
 		IEnumerator unloadEpisode(IObserver<Unit> observer)
@@ -82,11 +86,12 @@ namespace EcsRx.Unity.Framework
 			yield return new WaitForEndOfFrame();
 		}
 
-		void loadEpisodePlugin(int id)
+		void loadEpisodePlugin(int id, int missionId = 1)
 		{
 			eventSystem.Publish(new EpisodeLoadPluginEvent()
 			{
-				ID = id
+				Id = id,
+				MissionId = missionId
 			});
 		}
 

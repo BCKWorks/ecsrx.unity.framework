@@ -1,11 +1,18 @@
 ﻿using EcsRx.Infrastructure.Dependencies;
 using EcsRx.Infrastructure.Extensions;
+using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace EcsRx.Unity.Framework
 {
     public class PluginModules : IDependencyModule
     {
+        List<Type> bindings = new List<Type>()
+        {
+            typeof(IPluginLoader),
+        };
+
         public void Setup(IDependencyContainer container)
         {
             container.Bind<IPluginLoader, PluginLoader>();
@@ -13,13 +20,19 @@ namespace EcsRx.Unity.Framework
 
         public IEnumerator Initialize(IDependencyContainer container)
         {
-            yield return container.Resolve<IPluginLoader>().Initialize();
+            foreach (var bind in bindings)
+            {
+                yield return ((IModule)container.Resolve(bind)).Initialize();
+            }
         }
 
         public void Shutdown(IDependencyContainer container)
         {
-            container.Resolve<IPluginLoader>().Shutdown();
-            container.Unbind<IPluginLoader>();
+            foreach (var bind in bindings)
+            {
+                ((IModule)container.Resolve(bind)).Shutdown();
+                container.Unbind(bind);
+            }
         }
     }
 }
