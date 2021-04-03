@@ -36,12 +36,12 @@ namespace BCKWorks.Prototype.Plugins.Sample.Systems
 
         public void StartSystem(IObservableGroup observableGroup)
         {
-            Debug.Log($"Sample Bootstrap System {settings.Name}");
+            Debug.Log($"Bootstrap System {settings.Name}");
         }
 
         public void StopSystem(IObservableGroup observableGroup)
         {
-            Debug.Log("Unload Sample Bootstrap System");
+            Debug.Log($"Unload Bootstrap System {settings.Name}");
 
             subscriptions.DisposeAll();
         }

@@ -1,7 +1,13 @@
 # Changelog
 All notable changes to this package will be documented in this file.
 
-## [1.1.5] - 2021-04-02
+## [1.1.7] - 2021-04-03
+
+### Updated
+
+- Package Dependencies
+
+## [1.1.6] - 2021-04-02
 
 ### Added
 

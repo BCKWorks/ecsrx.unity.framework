@@ -87,6 +87,8 @@ namespace BCKWorks.Prototype
             uninstallSettings();
 
             subscriptions.DisposeAll();
+
+            Debug.Log("Application Shudowned");
         }
 
         private void OnApplicationPause(bool pause)

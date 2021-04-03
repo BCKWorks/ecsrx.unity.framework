@@ -9,6 +9,6 @@ namespace EcsRx.Unity.Framework
     public interface IPluginLoader : IModule
     {
         T Load<T>() where T: IEcsRxPlugin, new();
-        void Unload();
+        void Unload(IEcsRxPlugin plugin, bool remove = true);
     }
 }

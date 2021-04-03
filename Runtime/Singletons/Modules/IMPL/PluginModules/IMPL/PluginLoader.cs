@@ -4,6 +4,8 @@ using EcsRx.Unity.Dependencies;
 using EcsRx.Zenject;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UniRx;
 using UnityEngine;
 
@@ -13,7 +15,7 @@ namespace EcsRx.Unity.Framework
     {
         public bool Ready { get; private set; }
 
-        IEcsRxPlugin plugin;
+        Dictionary<Type, IEcsRxPlugin> plugins = new Dictionary<Type, IEcsRxPlugin>();
 
         public IEnumerator Initialize()
         {
@@ -23,20 +25,17 @@ namespace EcsRx.Unity.Framework
 
         public void Shutdown()
         {
-            Unload();
+            plugins.ForEachRun(kv =>
+            {
+                Unload(kv.Value, false);
+            });
+
+            plugins.Clear();
         }
 
         public T Load<T>() where T : IEcsRxPlugin, new()
         {
-            return load<T>();
-        }
-
-
-        T load<T>() where T : IEcsRxPlugin, new()
-        {
-            Unload();
-
-            plugin = new T();
+            IEcsRxPlugin plugin = new T();
 
             var container = EcsRxApplicationBehaviour.Instance.Container;
             var systemExecutor = EcsRxApplicationBehaviour.Instance.SystemExecutor;
@@ -44,10 +43,21 @@ namespace EcsRx.Unity.Framework
             plugin.GetSystemsForRegistration(container)
                 .ForEachRun(x => systemExecutor.AddSystem(x));
 
+            plugins.Add(typeof(T), plugin);
             return (T)plugin;
         }
 
-        public void Unload()
+        public void Unload<T>() where T : IEcsRxPlugin
+        {
+            var type = typeof(T);
+            if (plugins.ContainsKey(type))
+            {
+                var plugin = plugins.Where(x => x.Value.GetType() == type).FirstOrDefault().Value;
+                Unload(plugin);
+            }
+        }
+
+        public void Unload(IEcsRxPlugin plugin, bool remove = true)
         {
             if (plugin != null)
             {
@@ -56,7 +66,8 @@ namespace EcsRx.Unity.Framework
                 plugin.GetSystemsForRegistration(container)
                     .ForEachRun(x => systemExecutor.RemoveSystem(x));
                 plugin.UnsetupDependencies(container);
-                plugin = null;
+                if (remove)
+                    plugins.Remove(plugin.GetType());
             }
         }
     }
