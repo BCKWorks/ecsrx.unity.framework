@@ -13,11 +13,10 @@ namespace BCKWorks.Prototype
     public partial class Bootstrap : EcsRxUnityFrameworkApplicationBehaviour
     {
         public const string Name = "Prototype";
-        public const string SettingsName = Name + "Settings";
+        public const string SettingsName = "BCKWorks" + Name + "Settings";
         public const string SettingsPath = "BCKWorks/" + Name + "/Settings";
 
         List<IDisposable> subscriptions = new List<IDisposable>();
-        Installer bootstrapInstaller;
 
         protected override void BindSystems()
         {
@@ -33,56 +32,39 @@ namespace BCKWorks.Prototype
 
         protected override void ApplicationStarted()
         {
-            episodeFactory();
-
             var settings = Container.Resolve<Settings>();
-            var episodeLoader = Container.Resolve<IEpisodeLoader>();
-            var sceneLoader = Container.Resolve<ISceneLoader>();
-            sceneLoader.LoadBaseScenesAsync().Subscribe(x =>
-            {
-                this.Started = true;
+            var pluginLoader = Container.Resolve<IPluginLoader>();
 
-                Observable.Interval(TimeSpan.FromSeconds(0.1f)).First().Subscribe(y =>
+            this.Started = true;
+
+            Observable.Interval(TimeSpan.FromSeconds(0.1f)).First().Subscribe(y =>
+            {
+                EventSystem.Publish(new EcsRxUnityFrameworkApplicationStartedEvent()
                 {
-                    EventSystem.Publish(new EcsRxUnityFrameworkApplicationStartedEvent()
-                    {
-                    });
+
                 });
-            }).AddTo(subscriptions);
+            });
 
             EventSystem.Receive<EcsRxUnityFrameworkApplicationStartedEvent>().Subscribe(evt =>
             {
                 Debug.Log("Application Started");
-
-                episodeLoader.LoadEpisodeAsync(settings.StartEpisode, settings.StartMission).Subscribe(x =>
-                {
-                });
-            }).AddTo(subscriptions);
-
-            ///
-            /// Everytime Plugin Initialized
-            /// 
-            EventSystem.Receive<EpisodeReadyEvent>().Subscribe(evt =>
-            {
-                Debug.Log("Episode Ready Event");
-                EventSystem.Publish(new EpisodeStartedEvent());
+                pluginLoader.Load<Plugins.Sample.Plugin>();
             }).AddTo(subscriptions);
         }
 
         void installSettings()
         {
-            var installers = Resources.FindObjectsOfTypeAll<ScriptableObjectInstaller>();
-            var installer = installers.Where(x => x.name == SettingsName).FirstOrDefault();
+            var installer = Resources.Load(SettingsName);
             if (installer != null)
             {
-                bootstrapInstaller = installer as Installer;
-                if (bootstrapInstaller != null)
+                var _installer = installer as Installer;
+                if (_installer != null)
                 {
-                    bootstrapInstaller.Settings.Name = Name;
+                    _installer.Settings.Name = Name;
                     var nativeContainer = Container.NativeContainer as DiContainer;
                     if (nativeContainer != null)
                     {
-                        nativeContainer.BindInstance(bootstrapInstaller.Settings).IfNotBound();
+                        nativeContainer.BindInstance(_installer.Settings).IfNotBound();
                     }
                 }
             }
@@ -90,13 +72,11 @@ namespace BCKWorks.Prototype
 
         void uninstallSettings()
         {
-            if (bootstrapInstaller != null)
+            var nativeContainer = Container.NativeContainer as DiContainer;
+            if (nativeContainer != null)
             {
-                var nativeContainer = Container.NativeContainer as DiContainer;
-                if (nativeContainer != null)
-                {
+                if (nativeContainer.HasBinding<Settings>())
                     nativeContainer.Unbind<Settings>();
-                }
             }
         }
 

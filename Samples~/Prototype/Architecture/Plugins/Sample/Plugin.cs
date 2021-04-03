@@ -9,19 +9,17 @@ using EcsRx.Zenject.Extensions;
 using UnityEngine;
 using Zenject;
 
-namespace BCKWorks.Prototype.Plugins.Episode01
+namespace BCKWorks.Prototype.Plugins.Sample
 {
-    public class EpisodePlugin : IEcsRxPlugin
+    public class Plugin : IEcsRxPlugin
     {
-        public const string EpisodeName = "Episode01";
-        public const string SettingsName = EpisodeName + "Settings";
-        public const string SettingsPath = "BCKWorks/" + Bootstrap.Name + "/Plugins/" + EpisodeName + "/Settings";
-        public const string SystemNamespace = "BCKWorks." + Bootstrap.Name + ".Plugins." + EpisodeName + ".Systems";
+        public const string PluginName = "Sample";
+        public const string SettingsName = "BCKWorks" + PluginName + "PluginSettings";
+        public const string SettingsPath = "BCKWorks/" + Bootstrap.Name + "/Plugins/" + PluginName + "/Settings";
+        public const string SystemNamespace = "BCKWorks." + Bootstrap.Name + ".Plugins." + PluginName + ".Systems";
 
-        public string Name => EpisodeName;
+        public string Name => PluginName;
         public Version Version => new Version(0, 1, 0);
-
-        EpisodeInstaller episodeInstaller;
 
         public void SetupDependencies(IDependencyContainer container)
         {
@@ -42,18 +40,17 @@ namespace BCKWorks.Prototype.Plugins.Episode01
 
         void installSettings(IDependencyContainer container)
         {
-            var installers = Resources.FindObjectsOfTypeAll<ScriptableObjectInstaller>();
-            var installer = installers.Where(x => x.name == SettingsName).FirstOrDefault();
+            var installer = Resources.Load(SettingsName);
             if (installer != null)
             {
-                episodeInstaller = installer as EpisodeInstaller;
-                if (episodeInstaller != null)
+                var _installer = installer as Installer;
+                if (_installer != null)
                 {
-                    episodeInstaller.Settings.Name = Name;
+                    _installer.Settings.Name = Name;
                     var nativeContainer = container.NativeContainer as DiContainer;
                     if (nativeContainer != null)
                     {
-                        nativeContainer.BindInstance(episodeInstaller.Settings).IfNotBound();
+                        nativeContainer.BindInstance(_installer.Settings).IfNotBound();
                     }
                 }
             }
@@ -61,13 +58,11 @@ namespace BCKWorks.Prototype.Plugins.Episode01
 
         void uninstallSettings(IDependencyContainer container)
         {
-            if (episodeInstaller != null)
+            var nativeContainer = container.NativeContainer as DiContainer;
+            if (nativeContainer != null)
             {
-                var nativeContainer = container.NativeContainer as DiContainer;
-                if (nativeContainer != null)
-                {
+                if (nativeContainer.HasBinding<Settings>())
                     nativeContainer.Unbind<Settings>();
-                }
             }
         }
     }

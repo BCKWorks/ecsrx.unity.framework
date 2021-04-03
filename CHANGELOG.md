@@ -3,6 +3,16 @@ All notable changes to this package will be documented in this file.
 
 ## [1.1.5] - 2021-04-02
 
+### Added
+
+- Sample Plugin in Sample
+
+### Removed
+
+- Episode Modules
+
+## [1.1.5] - 2021-04-02
+
 ### Updated
 
 - Episode Modules with Sample

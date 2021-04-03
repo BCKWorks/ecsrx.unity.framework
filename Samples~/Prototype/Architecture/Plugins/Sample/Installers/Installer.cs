@@ -2,17 +2,16 @@
 using UnityEngine;
 using Zenject;
 
-namespace BCKWorks.Prototype.Plugins.Episode01
+namespace BCKWorks.Prototype.Plugins.Sample
 {
     [Serializable]
     public class Settings
     {
         public string Name { get; set; }
-        public string EpisodeSceneName = EpisodePlugin.EpisodeName;
     }
 
-    [CreateAssetMenu(fileName = EpisodePlugin.SettingsName, menuName = EpisodePlugin.SettingsPath)]
-    public class EpisodeInstaller : ScriptableObjectInstaller<EpisodeInstaller>
+    [CreateAssetMenu(fileName = Plugin.SettingsName, menuName = Plugin.SettingsPath)]
+    public class Installer : ScriptableObjectInstaller<Installer>
     {
 #pragma warning disable 0649
         [SerializeField]

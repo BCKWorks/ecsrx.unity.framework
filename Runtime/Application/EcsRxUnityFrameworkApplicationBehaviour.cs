@@ -23,7 +23,6 @@ namespace EcsRx.Unity.Framework
 
             Container.LoadModule<ToolModules>();
             Container.LoadModule<PluginModules>();
-            Container.LoadModule<EpisodeModules>();
             Container.LoadModule<SceneModules>();
         }
 
