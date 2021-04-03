@@ -1,4 +1,4 @@
-![IMG](https://img.shields.io/badge/pkg%20name-com.bckworks.ecsrx,unity,framework-yellowgreen?style=for-the-badge&logo=appveyor)
+![IMG](https://img.shields.io/badge/pkg%20name-com.bckworks.ecsrx.unity.framework-yellowgreen?style=for-the-badge&logo=appveyor)
 
 ![NPM](https://img.shields.io/npm/v/com.bckworks.ecsrx.unity.framework)
 ![NPM](https://img.shields.io/npm/l/com.bckworks.ecsrx.unity.framework)
