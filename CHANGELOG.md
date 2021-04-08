@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this package will be documented in this file.
 
+## [1.1.9] - 2021-04-08
+
+### Added
+
+- GameObject.HasEntity GameObjectExtension to get the entity
+
 ## [1.1.8] - 2021-04-03
 
 ### Updated

@@ -24,5 +24,10 @@ namespace EcsRx.Unity.Framework
             }
             return entityView.Entity;
         }
+
+        public static bool HasEntity(this GameObject go)
+        {
+            return go.GetComponent<EntityView>();
+        }
     }
 }
