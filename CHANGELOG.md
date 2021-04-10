@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this package will be documented in this file.
 
+## [1.1.10] - 2021-04-11
+
+### Changed
+
+- .asmdef move to correct path
+
 ## [1.1.9] - 2021-04-08
 
 ### Added
