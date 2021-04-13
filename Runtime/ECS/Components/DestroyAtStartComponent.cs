@@ -12,13 +12,18 @@ namespace EcsRx.Unity.Framework
 
     public class DestroyAtStartComponent : RegisterAsEntity
     {
-        public override void Convert(IEntity entity)
+        public override bool Convert(IEntity entity)
         {
+            if (!base.Convert(entity))
+                return false;
+
             var component = new DestroyAtStart();
 
             entity.AddComponentSafe(component);
 
             Destroy(this);
+
+            return true;
         }
     }
 }
