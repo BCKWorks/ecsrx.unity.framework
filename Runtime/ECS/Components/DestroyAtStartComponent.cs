@@ -14,17 +14,9 @@ namespace EcsRx.Unity.Framework
     {
         public override void Convert(IEntity entity)
         {
-            if (!isActiveAndEnabled)
-            {
-                Destroy(this);
-                return;
-            }
-
             var component = new DestroyAtStart();
 
             entity.AddComponentSafe(component);
-
-            Destroy(this);
         }
     }
 }
