@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this package will be documented in this file.
 
+## [1.1.13] - 2021-04-14
+
+### Updated
+
+- DestroyAtStart component / system
+
 ## [1.1.12] - 2021-04-13
 
 ### Added
