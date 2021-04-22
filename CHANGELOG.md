@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this package will be documented in this file.
 
+## [1.1.14] - 2021-04-22
+
+### Added
+
+- FollowTarget component / system
+
 ## [1.1.13] - 2021-04-14
 
 ### Updated
