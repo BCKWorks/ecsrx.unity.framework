@@ -1,6 +1,18 @@
 # Changelog
 All notable changes to this package will be documented in this file.
 
+## [1.1.15] - 2021-07-22
+
+### Added
+
+- Plugin Unload<T>, UnloadAll
+- Plugin cleanup when application shutdown
+
+### Changed
+
+- Singletons 삭제, Modules는 이제 각자의 모듈 단위로 조직화 됨
+- Update Sample
+
 ## [1.1.14] - 2021-04-22
 
 ### Added

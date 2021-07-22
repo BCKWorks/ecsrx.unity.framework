@@ -1,6 +1,7 @@
 ﻿using EcsRx.Extensions;
 using EcsRx.Infrastructure.Extensions;
 using EcsRx.Unity.Framework;
+using EcsRx.Unity.Framework.Modules.Plugin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +29,15 @@ namespace BCKWorks.Prototype
         protected override void LoadModules()
         {
             base.LoadModules();
+
+            Container.LoadModule<Modules.Sample.Module>();
         }
 
         protected override void ApplicationStarted()
         {
             var settings = Container.Resolve<Settings>();
-            var pluginLoader = Container.Resolve<IPluginLoader>();
 
+            // scene first component registry start
             this.Started = true;
 
             Observable.Interval(TimeSpan.FromSeconds(0.1f)).First().Subscribe(y =>
@@ -47,8 +50,18 @@ namespace BCKWorks.Prototype
 
             EventSystem.Receive<EcsRxUnityFrameworkApplicationStartedEvent>().Subscribe(evt =>
             {
-                Debug.Log("Application Started");
-                pluginLoader.Load<Plugins.Sample.Plugin>();
+                // system ready
+                Debug.Log($"{Name} Application Started");
+
+                var pluginLoader = Container.Resolve<IPluginLoader>();
+                pluginLoader.Load<Plugins.Sample1.Plugin>();
+                pluginLoader.Load<Plugins.Sample2.Plugin>();
+
+                var sampleInterface = Container.Resolve<Modules.Sample.ISampleInterface>();
+                if (sampleInterface != null)
+                {
+                    sampleInterface.Print();
+                }
             }).AddTo(subscriptions);
         }
 
@@ -88,7 +101,7 @@ namespace BCKWorks.Prototype
 
             subscriptions.DisposeAll();
 
-            Debug.Log("Application Shudowned");
+            Debug.Log($"{Name} Application Shutdowned");
         }
 
         private void OnApplicationPause(bool pause)

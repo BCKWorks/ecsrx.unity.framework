@@ -21,9 +21,9 @@ namespace EcsRx.Unity.Framework
         {
             base.LoadModules();
 
-            Container.LoadModule<ToolModules>();
-            Container.LoadModule<PluginModules>();
-            Container.LoadModule<SceneModules>();
+            Container.LoadModule<Modules.Tool.Module>();
+            Container.LoadModule<Modules.Plugin.Module>();
+            Container.LoadModule<Modules.Scene.Module>();
         }
 
         protected override IEnumerator ApplicationStartedAsync()
@@ -40,6 +40,12 @@ namespace EcsRx.Unity.Framework
 
         protected virtual void OnDestroy()
         {
+            if (Container.HasBinding<Modules.Plugin.IPluginLoader>())
+            {
+                var pluginLoader = Container.Resolve<Modules.Plugin.IPluginLoader>();
+                pluginLoader.UnloadAll();
+            }
+
             Container.UnloadModules();
             StopAndUnbindAllSystems();
         }
