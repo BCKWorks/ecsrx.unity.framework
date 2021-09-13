@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this package will be documented in this file.
 
+## [1.1.16] - 2021-08-10
+
+### Updated
+
+- Update Sample
+
 ## [1.1.15] - 2021-07-22
 
 ### Added

@@ -1,0 +1,7 @@
+<linker>
+  <assembly fullname="bckworks.ecsrx.unity.framework" preserve="all"/>
+  <assembly fullname="bckworks.ecsrx.unity" preserve="all"/>
+  <assembly fullname="bckworks.ecsrx" preserve="all"/>
+  <assembly fullname="bckworks.unirx" preserve="all"/>
+  <assembly fullname="bckworks.zenject" preserve="all"/>
+</linker>
